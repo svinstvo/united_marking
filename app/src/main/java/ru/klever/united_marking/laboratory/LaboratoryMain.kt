@@ -39,28 +39,24 @@ class LaboratoryMain:AppCompatActivity(), OnLaboratoryItemClickListener {
     private val sendInProgress=MutableLiveData(false)
     private val client = OkHttpClient()
 
-
     private lateinit var settings: Settings
     private lateinit var adapter: LaboratoryMainRecycleAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.laboratory_main)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-        settings= Settings(this)
-
-
+        settings = Settings(this)
         sendInProgress.observe(this, {
             if (it) {
-                send_progressBar.visibility=View.VISIBLE
+                send_progressBar.visibility = View.VISIBLE
             } else {
-                send_progressBar.visibility=View.INVISIBLE
+                send_progressBar.visibility = View.INVISIBLE
             }
         })
 
-        selected_reason.text=settings.laboratoryGetLastReason().reason_text
+        selected_reason.text = settings.laboratoryGetLastReason().reason_text
         group_reason_recycle.referencedIds.forEach { id ->
             findViewById<View>(id).setOnClickListener {
                 val intent = Intent(this, LaboratoryReasonsRecycleView::class.java)
@@ -69,68 +65,43 @@ class LaboratoryMain:AppCompatActivity(), OnLaboratoryItemClickListener {
         }
 
         send_button.setOnClickListener {
-                val myJson= JSONObject(mapOf("deviceID" to settings.id,"action" to "dropout",
-                    "dropoutReason" to settings.laboratoryGetLastReason().reason_id,"codes" to JSONArray(myCodes)))
-                sendCodes(this,myJson,sendInProgress)
+            val myJson = JSONObject(
+                mapOf(
+                    "deviceID" to settings.id,
+                    "action" to "dropout",
+                    "dropoutReason" to settings.laboratoryGetLastReason().reason_id,
+                    "codes" to JSONArray(myCodes)
+                )
+            )
+            sendCodes(this, myJson, sendInProgress)
         }
 
-        val recyclerView: RecyclerView =findViewById(R.id.laboratory_main_recycleview)
-        recyclerView.layoutManager= LinearLayoutManager(this)
-        adapter=LaboratoryMainRecycleAdapter(myCodes,this)
-        recyclerView.adapter= adapter
+        val recyclerView: RecyclerView = findViewById(R.id.laboratory_main_recycleview)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = LaboratoryMainRecycleAdapter(myCodes, this)
+        recyclerView.adapter = adapter
 
-        text_input.setOnKeyListener { v, keyCode, event ->
+
+        data_code.setOnKeyListener { _, keyCode, keyEvent ->
             Log.d(TAG,keyCode.toString())
-            Log.d(TAG,event.toString())
-            when {
-
-                //Check if it is the Enter-Key,      Check if the Enter Key was pressed down
-                ((keyCode == KeyEvent.KEYCODE_ENTER) && (event.action == KeyEvent.ACTION_DOWN)) -> {
-
-
-                    //perform an action here e.g. a send message button click
-                    //sendButton.performClick()
-
-                    //return true
-                    return@setOnKeyListener true
+            if ((keyEvent.action==ACTION_UP && keyCode== KEYCODE_ENTER)) {
+                val scanedCode=data_code.text.toString().trim()
+                data_code.text?.clear()
+                if (scanedCode !in myCodes) {
+                    myCodes.add(scanedCode)
+                    send_button.visibility=View.VISIBLE
+                } else {
+                    showAlert("Этот код уже был отсканирован")
                 }
-                else -> false
+                adapter.notifyDataSetChanged()
+                send_button.text="ОТПРАВИТЬ ${myCodes.size} КОДОВ"
+                Log.d(TAG,myCodes.size.toString())
+
+                return@setOnKeyListener true
             }
-
-
+            return@setOnKeyListener false
         }
-
-
-
     }
-
-
-
-
-    fun codeEnter(){
-        
-    }
-        //text_input.setOnKeyListener { _, keyCode, keyEvent ->
-        //    Log.d(TAG,keyCode.toString())
-        //    if ((keyEvent.action==ACTION_UP && keyCode== KEYCODE_ENTER)) {
-        //        val scanedCode=text_input.text.toString().trim()
-        //        text_input.text?.clear()
-        //        if (scanedCode !in myCodes) {
-        //            myCodes.add(scanedCode)
-        //            send_button.visibility=View.VISIBLE
-        //        } else {
-        //            showAlert("Этот код уже был отсканирован")
-        //        }
-        //        adapter.notifyDataSetChanged()
-        //        send_button.text="ОТПРАВИТЬ ${myCodes.size} КОДОВ"
-        //        Log.d(TAG,myCodes.size.toString())
-        //
-        //        return@setOnKeyListener true
-        //    }
-        //    return@setOnKeyListener false
-        //}
-
-
 
     private fun showAlert(message: String) {
         GlobalScope.launch {
@@ -143,10 +114,10 @@ class LaboratoryMain:AppCompatActivity(), OnLaboratoryItemClickListener {
                 if (Build.VERSION.SDK_INT >= 26) {
                     vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
                 } else {
-                    vibrator.vibrate(200)
+                    vibrator.vibrate(2000)
                 }
-                val mediaPlayer=MediaPlayer.create(this@LaboratoryMain,R.raw.bike_horn)
-                mediaPlayer.start()
+                //val mediaPlayer=MediaPlayer.create(this@LaboratoryMain,R.raw.bike_horn)
+                //mediaPlayer.start()
             }
             Thread.sleep(2000)
             Handler(Looper.getMainLooper()).post {
@@ -176,7 +147,6 @@ class LaboratoryMain:AppCompatActivity(), OnLaboratoryItemClickListener {
         Log.d(ru.klever.united_marking.TAG,code)
 
     }
-
 
     fun sendCodes(context: Context, data:JSONObject, sendStatus:MutableLiveData<Boolean>) {
         sendStatus.postValue(true)

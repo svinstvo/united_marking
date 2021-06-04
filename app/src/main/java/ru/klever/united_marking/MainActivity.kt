@@ -30,12 +30,10 @@ class MainActivity : AppCompatActivity() {
                   load_settings_main.visibility=View.VISIBLE
                   Log.d(TAG,settings.loadedfromserver.toString())
                   if (settings.loadedfromserver) {
-                      when (settings.getRole()){
-                          "laboratory" -> {
-                              val intent=Intent(this, LaboratoryMain::class.java)
-                              startActivity(intent)
-                          }
-                      }
+                      startActivity(settings)
+                  } else {
+                      Log.d(TAG,"not loaded")
+                      last_message.text="Не получилось получить настройки с сервера"
                   }
               }
           })
@@ -48,6 +46,19 @@ class MainActivity : AppCompatActivity() {
               settings.loadSetingsMain(loadstatus)
           }
 
+          load_settings_locale.setOnClickListener {
+              startActivity(settings)
+          }
+
           settings.loadSetingsMain(loadstatus)
+    }
+
+    private fun startActivity(settings: Settings) {
+        when (settings.getRole()) {
+            "laboratory" -> {
+                val intent = Intent(this, LaboratoryMain::class.java)
+                startActivity(intent)
+            }
+        }
     }
 }

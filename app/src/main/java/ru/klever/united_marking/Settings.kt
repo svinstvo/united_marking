@@ -12,6 +12,7 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
+import java.util.concurrent.TimeUnit
 
 val TAG="debuu"
 
@@ -41,7 +42,7 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
             id= (1..16)
                 .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
                 .map(charPool::get)
-                .joinToString("");
+                .joinToString("")
             val edit=sharedpref.edit()
             edit.putString("id",id)
             edit.apply()
@@ -128,6 +129,7 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
         val request = Request.Builder()
             .url(spec)
             .build()
+
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

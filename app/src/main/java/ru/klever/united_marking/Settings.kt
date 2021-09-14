@@ -1,6 +1,7 @@
 package ru.klever.united_marking
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -12,9 +13,15 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
-import java.util.concurrent.TimeUnit
+import java.security.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
-val TAG="debuu"
+
+const val TAG="debuu"
 
 class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:String=""): ViewModel(){
     var ip:String=_ip
@@ -38,12 +45,17 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
             }
         //if id empty generate new and save
         if (id=="") {
-            val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-            id= (1..16)
-                .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
-                .map(charPool::get)
-                .joinToString("")
             val edit=sharedpref.edit()
+
+            id = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+                //val formatted = current.format(formatter)
+                current.format(formatter)
+            } else {
+                SimpleDateFormat("yyyyMMddHHmmssSSS").format(Date())
+
+            }
             edit.putString("id",id)
             edit.apply()
         }
@@ -152,11 +164,9 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
                     for ((name, value) in response.headers) {
                         println("$name: $value")
                     }
-
                 }
                 loadStatus.postValue(false)
             }
         })
     }
-
 }

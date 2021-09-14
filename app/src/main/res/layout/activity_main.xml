@@ -33,9 +33,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="Подождите. Идет получение настроек с сервера."
+        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/load_settings_main"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/load_settings_locale"

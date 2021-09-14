@@ -1,6 +1,7 @@
 package ru.klever.united_marking
 
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.klever.united_marking.add_code.AddCodeMain
+import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.laboratory.LaboratoryMain
 
 class MainActivity : AppCompatActivity() {
@@ -54,10 +57,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startActivity(settings: Settings) {
+        Log.d(TAG,"settings.getRole() ${settings.getRole()}")
         when (settings.getRole()) {
+
             "laboratory" -> {
                 val intent = Intent(this, LaboratoryMain::class.java)
                 startActivity(intent)
+            }
+
+            "code_viewer" -> {
+                val intent = Intent(this, CodeViewerMain::class.java)
+                startActivity(intent)
+            }
+            "add_code" -> {
+                val intent=Intent(this, AddCodeMain::class.java)
+                startActivity(intent)
+
+            }
+            "none" -> {
+                last_message.text="Терминалу не назначена роль \n id=${settings.id}"
             }
         }
     }

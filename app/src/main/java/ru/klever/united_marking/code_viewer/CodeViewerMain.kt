@@ -1,5 +1,6 @@
 package ru.klever.united_marking.code_viewer
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.KeyEvent
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.code_viewer_main.*
@@ -33,21 +35,33 @@ class CodeViewerMain: AppCompatActivity(){
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         settings = Settings(this)
         scan_field.requestFocus()
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        scan_field.setOnKeyListener { _, keyCode, keyEvent ->
-            Log.d(TAG,keyCode.toString())
-            if ((keyEvent.action== KeyEvent.ACTION_UP && keyCode== KeyEvent.KEYCODE_ENTER)) {
-                val scanedCode=scan_field.text.toString().trim()
+        // Set clipboard primary clip change listener
+        clipboard.addPrimaryClipChangedListener {
+            if (lifecycle.currentState==Lifecycle.State.RESUMED){
+                val scanedCode: String = clipboard.primaryClip?.getItemAt(0)?.text.toString().trim()
+                //val scanedCode=scan_field.text.toString().trim()
                 Log.d(TAG,scanedCode)
                 sendCodes(this,scanedCode,sendInProgress)
                 last_scanned_code.text=scan_field.text
                 scan_field.text.clear()
             }
-            return@setOnKeyListener false
         }
+//        scan_field.setOnKeyListener { _, keyCode, keyEvent ->
+//            Log.d(TAG,keyCode.toString())
+//            if ((keyEvent.action== KeyEvent.ACTION_UP && keyCode== KeyEvent.KEYCODE_ENTER)) {
+//                val scanedCode=scan_field.text.toString().trim()
+//                Log.d(TAG,scanedCode)
+//                sendCodes(this,scanedCode,sendInProgress)
+//                last_scanned_code.text=scan_field.text
+//                scan_field.text.clear()
+//            }
+//            return@setOnKeyListener false
+//        }
     }
 
-    fun sendCodes(context: Context, data: String, sendStatus: MutableLiveData<Boolean>) {
+    private fun sendCodes(context: Context, data: String, sendStatus: MutableLiveData<Boolean>) {
         sendStatus.postValue(true)
         val url=settings.getAPIUrl()+"/markirovka/km/show_code_info?km=$data"
         Log.d(TAG,url)

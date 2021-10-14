@@ -110,7 +110,7 @@ class LaboratoryMain:AppCompatActivity(), OnLaboratoryItemClickListener {
                 alert_textView.visibility=View.VISIBLE
                 alert_textView.text=message
 
-                val vibrator = this@LaboratoryMain?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                val vibrator = this@LaboratoryMain.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 if (Build.VERSION.SDK_INT >= 26) {
                     vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
                 } else {

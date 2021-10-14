@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.JsonArray
 import okhttp3.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
@@ -99,14 +101,16 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
         run(spec,loadstatus)
     }
 
-    fun getRole():String{
-        return JSONObject(sharedpref.getString("settingsJSON", "")).getString("role")
+    fun getRoles(): JSONArray {
+        val jsonObject= JSONObject(sharedpref.getString("settingsJSON", "")).getString("roles")
+        return JSONArray(jsonObject)
     }
     fun getIP():String{
         return ip
     }
     fun getCustomKey(key:String):String{
         return JSONObject(sharedpref.getString("settingsJSON", "")).getString(key)
+
     }
 
     fun laboratorySetReason(reason:Reasons){
@@ -123,7 +127,7 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
     }
 
     fun laboratoryGetAllReasonsAndId(): MutableList<Reasons> {
-        val json=JSONObject(sharedpref.getString("settingsJSON", "")).getString("avalible_reasons")
+        val json=JSONObject(sharedpref.getString("settingsJSON", "")).getString("available_defect_reasons")
         val availableReasons=JSONObject(json)
         val list= mutableListOf<Reasons>()
 

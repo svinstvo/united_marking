@@ -1,4 +1,4 @@
-package ru.klever.united_marking.add_code
+package ru.klever.united_marking.add_scanned_code
 
 data class batchsItem(
     val batch_id: Int,

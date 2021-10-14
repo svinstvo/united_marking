@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_Date" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/add_code_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -42,9 +42,11 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/add_code_textView"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/poehali"

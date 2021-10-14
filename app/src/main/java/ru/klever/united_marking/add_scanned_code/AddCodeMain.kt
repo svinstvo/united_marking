@@ -1,5 +1,6 @@
-package ru.klever.united_marking.add_code
+package ru.klever.united_marking.add_scanned_code
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -11,9 +12,9 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import kotlinx.android.synthetic.main.add_code_main.*
+import kotlinx.android.synthetic.main.add_scanned_code_main.*
 import kotlinx.android.synthetic.main.code_viewer_main.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -37,26 +38,42 @@ class AddCodeMain: AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.add_code_main)
+        setContentView(R.layout.add_scanned_code_main)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         settings = Settings(this)
         var batchs=Batchs()
         batchs_array= MutableLiveData(Batchs())
-        editText_add_code.requestFocus()
+        //editText_add_code.requestFocus()
+        add_code_textView.requestFocus()
 
-        editText_add_code.setOnKeyListener { _, keyCode, keyEvent ->
-            Log.d(TAG,keyCode.toString())
-            if ((keyEvent.action== KeyEvent.ACTION_UP && keyCode== KeyEvent.KEYCODE_ENTER)) {
-                val scanedCode=editText_add_code.text.toString().trim()
-                Log.d(TAG,scanedCode)
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        // Set clipboard primary clip change listener
+        clipboard.addPrimaryClipChangedListener {
+            if (lifecycle.currentState ==Lifecycle.State.RESUMED) {
+                val textToPaste:String = clipboard.primaryClip?.getItemAt(0)?.text.toString().trim()
+                Log.d(TAG,textToPaste)
 
                 try {
-                    var selected_batch:batchsItem= spinner_select_batch.selectedItem as batchsItem
-                    sendCodes(this,scanedCode,selected_batch = selected_batch,sendInProgress)
-                    //last_scanned_code.text=scan_field.text
+                    val selectedBatch:batchsItem= spinner_select_batch.selectedItem as batchsItem
+                    sendCodes(this,textToPaste,selected_batch = selectedBatch,sendInProgress)
                     editText_add_code.text.clear()
                 }catch (e: Exception) {
-                    //Log.d(TAG,e.toString())
+                    Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        editText_add_code.setOnKeyListener { _, keyCode, keyEvent ->
+            editText_add_code.text.clear()
+            if ((keyEvent.action== KeyEvent.ACTION_UP && keyCode== KeyEvent.KEYCODE_ENTER)) {
+                val scanedCode=editText_add_code.text.toString().trim()
+
+                try {
+                    val selectedBatch:batchsItem= spinner_select_batch.selectedItem as batchsItem
+                    sendCodes(this,scanedCode,selected_batch = selectedBatch,sendInProgress)
+                    editText_add_code.text.clear()
+                }catch (e: Exception) {
                     Toast.makeText(this,e.toString(),Toast.LENGTH_LONG)
 
                 }

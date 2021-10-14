@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/main_activity_linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/load_settings_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
     <Button
         android:id="@+id/load_settings_main"
         android:layout_width="wrap_content"
@@ -30,14 +40,15 @@
     <TextView
         android:id="@+id/last_message"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="32dp"
-        android:text="Подождите. Идет получение настроек с сервера."
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/load_settings_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/main_activity_linearLayout"
+        tools:visibility="invisible" />
 
     <Button
         android:id="@+id/load_settings_locale"

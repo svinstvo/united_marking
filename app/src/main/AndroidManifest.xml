@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.klever.united_marking">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -13,29 +13,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+        <receiver
+            android:name=".ScanReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
 
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".laboratory.LaboratoryReasonsRecycleView"
+        <activity
+            android:name=".laboratory.LaboratoryReasonsRecycleView"
             android:label="Выберети причину вывода"
-            android:parentActivityName=".laboratory.LaboratoryMain">
-        </activity>
-
-        <activity android:name=".laboratory.LaboratoryMain"
+            android:parentActivityName=".laboratory.LaboratoryMain"></activity>
+        <activity
+            android:name=".laboratory.LaboratoryMain"
             android:label="Лаборатория"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".code_viewer.CodeViewerMain" />
-        <activity android:name=".add_code.AddCodeMain" />
-
+        <activity android:name=".add_scanned_code.AddCodeMain" />
+        <activity android:name=".add_km_to_reprint_pool.AddKmToReprintPool" />
+        <activity android:name=".add_km_to_reprint_pool.AddKmToReprintPoolErrorMessage"/>
 
     </application>
 

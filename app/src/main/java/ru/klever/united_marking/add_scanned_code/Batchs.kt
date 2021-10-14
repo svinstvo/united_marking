@@ -1,10 +1,9 @@
-package ru.klever.united_marking.add_code
+package ru.klever.united_marking.add_scanned_code
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import okhttp3.*
 import ru.klever.united_marking.Settings

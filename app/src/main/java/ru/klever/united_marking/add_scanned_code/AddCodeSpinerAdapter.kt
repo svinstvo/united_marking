@@ -1,13 +1,11 @@
-package ru.klever.united_marking.add_code
+package ru.klever.united_marking.add_scanned_code
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.lifecycle.MutableLiveData
-import kotlinx.android.synthetic.main.add_code_select_batch_spinner_item.view.*
+import kotlinx.android.synthetic.main.add_scanned_code_select_batch_spinner_item.view.*
 import ru.klever.united_marking.R
 
 class AddCodeSpinerAdapter(context:Context, batchs: Batchs):ArrayAdapter<batchsItem>(context,0,batchs){
@@ -24,7 +22,7 @@ class AddCodeSpinerAdapter(context:Context, batchs: Batchs):ArrayAdapter<batchsI
         val batch = getItem(position)
 
         val view = recycledView ?: LayoutInflater.from(context).inflate(
-            R.layout.add_code_select_batch_spinner_item,
+            R.layout.add_scanned_code_select_batch_spinner_item,
             parent,false
         )
 

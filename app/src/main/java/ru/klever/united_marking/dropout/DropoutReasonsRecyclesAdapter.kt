@@ -1,4 +1,4 @@
-package ru.klever.united_marking.laboratory
+package ru.klever.united_marking.dropout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

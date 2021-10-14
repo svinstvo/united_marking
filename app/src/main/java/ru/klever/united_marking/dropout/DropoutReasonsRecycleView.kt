@@ -1,4 +1,4 @@
-package ru.klever.united_marking.laboratory
+package ru.klever.united_marking.dropout
 
 import android.app.Activity
 import android.content.Intent
@@ -10,21 +10,20 @@ import ru.klever.united_marking.R
 import ru.klever.united_marking.Reasons
 import ru.klever.united_marking.Settings
 
-class LaboratoryReasonsRecycleView: AppCompatActivity(), OnReasonItemClickListener {
+class DropoutReasonsRecycleView: AppCompatActivity(), OnReasonItemClickListener {
     val TAG = "debuu"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.laboratory_reason_recycle_view)
-
+        setContentView(R.layout.dropout_reason_recycle_view)
         val settings: Settings = Settings(this)
-        val recyclerView:RecyclerView=findViewById(R.id.laboratory_reason_recycle_view)
+        val recyclerView:RecyclerView=findViewById(R.id.dropout_reason_recycle_view)
         recyclerView.layoutManager=LinearLayoutManager(this)
         recyclerView.adapter=
-            LaboratoryReasonRecycleAdapter(settings.laboratoryGetAllReasonsAndId(),this)
+            LaboratoryReasonRecycleAdapter(settings.dropoutGetAllReasonsAndId(),this)
     }
 
-    override fun onItemClicked(reason: Reasons) {
 
+    override fun onItemClicked(reason: Reasons) {
         val data=Intent()
         data.putExtra("reason_id",reason.reason_id)
         data.putExtra("reason_text",reason.reason_text)

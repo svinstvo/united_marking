@@ -15,8 +15,9 @@
         android:id="@+id/selected_reason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="TextView"
-        android:textSize="24sp"
+        android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -24,11 +25,12 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Причина выбытия: "
-        android:textSize="24sp"
+        android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <!--
     <EditText
         android:id="@+id/data_code"
         android:layout_width="fill_parent"
@@ -36,26 +38,15 @@
         android:clickable="false"
         android:cursorVisible="false"
         android:hint="hint"
-        android:inputType="text"
+        android:inputType="none"
         android:isScrollContainer="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selected_reason" />
-
-    <Button
-        android:id="@+id/send_button"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        android:text="Отправить"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/data_code" />
-
+        app:layout_constraintTop_toBottomOf="@+id/selected_reason"
+        tools:visibility="invisible" />
+    -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/laboratory_main_recycleview"
+        android:id="@+id/dropout_main_recycleview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -63,8 +54,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/send_button"
-        tools:listitem="@layout/laboratory_main_recycleview_item" />
+        tools:listitem="@layout/dropout_main_recycleview_item"
+        tools:visibility="invisible" />
 
     <ProgressBar
         android:id="@+id/send_progressBar"

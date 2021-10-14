@@ -113,21 +113,21 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
 
     }
 
-    fun laboratorySetReason(reason:Reasons){
+    fun dropoutSetReason(reason:Reasons){
         val editor=sharedpref.edit()
-        editor.putString("laboratory_last_reason_text",reason.reason_text)
-        editor.putString("laboratory_last_reason_id",reason.reason_id)
+        editor.putString("dropout_last_reason_text",reason.reason_text)
+        editor.putString("dropout_last_reason_id",reason.reason_id)
         editor.apply()
     }
 
-    fun laboratoryGetLastReason():Reasons{
-        val reasonText:String = sharedpref.getString("laboratory_last_reason_text","Выберите причину")!!
-        val reasonId:String = sharedpref.getString("laboratory_last_reason_id","")!!
+    fun dropoutGetLastReason():Reasons{
+        val reasonText:String = sharedpref.getString("dropout_last_reason_text","Выберите причину")!!
+        val reasonId:String = sharedpref.getString("dropout_last_reason_id","")!!
         return Reasons(reasonId,reasonText)
     }
 
-    fun laboratoryGetAllReasonsAndId(): MutableList<Reasons> {
-        val json=JSONObject(sharedpref.getString("settingsJSON", "")).getString("available_defect_reasons")
+    fun dropoutGetAllReasonsAndId(): MutableList<Reasons> {
+        val json=JSONObject(sharedpref.getString("settingsJSON", "")).getString("available_dropout_reasons")
         val availableReasons=JSONObject(json)
         val list= mutableListOf<Reasons>()
 

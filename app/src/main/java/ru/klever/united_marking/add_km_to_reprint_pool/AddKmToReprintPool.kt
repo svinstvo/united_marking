@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import kotlinx.android.synthetic.main.add_code_main.*
+//import kotlinx.android.synthetic.main.add_code_main.*
+
+
 import kotlinx.android.synthetic.main.add_km_to_reprint_pool.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

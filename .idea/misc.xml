@@ -7,6 +7,8 @@
         <entry key="..\:/android/united_marking/app/src/main/res/layout/add_code_main.xml" value="0.15625" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/add_km_to_reprint_pool.xml" value="0.5" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/add_km_to_reprint_pool_error_message.xml" value="0.24739583333333334" />
+        <entry key="..\:/android/united_marking/app/src/main/res/layout/dropout_main.xml" value="0.24739583333333334" />
+        <entry key="..\:/android/united_marking/app/src/main/res/layout/dropout_main_recycleview_item.xml" value="0.24739583333333334" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/laboratory_main.xml" value="0.24739583333333334" />
       </map>
     </option>

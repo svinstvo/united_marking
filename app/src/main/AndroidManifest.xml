@@ -27,11 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".laboratory.LaboratoryReasonsRecycleView"
+            android:name=".dropout.DropoutReasonsRecycleView"
             android:label="Выберети причину вывода"
-            android:parentActivityName=".laboratory.LaboratoryMain"></activity>
+            android:parentActivityName=".dropout.DropoutMain"></activity>
         <activity
-            android:name=".laboratory.LaboratoryMain"
+            android:name=".dropout.DropoutMain"
             android:label="Лаборатория"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden"></activity>

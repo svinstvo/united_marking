@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.klever.united_marking.add_scanned_code.AddCodeMain
 import ru.klever.united_marking.add_km_to_reprint_pool.AddKmToReprintPool
 import ru.klever.united_marking.code_viewer.CodeViewerMain
-import ru.klever.united_marking.laboratory.LaboratoryMain
+import ru.klever.united_marking.dropout.DropoutMain
 
 class MainActivity : AppCompatActivity() {
     val TAG = "debuu"
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         when (text) {
             "add_code" -> dynamicButton.text = "Ручное добавление кодов в партию"
             "code_viewer" -> dynamicButton.text = "Проверка нанесенных КМ"
-            "laboratory" -> dynamicButton.text = "Лаборатория"
+            "dropout" -> dynamicButton.text = "Выбытие КМ"
             "add_km_to_reprint_pool" -> dynamicButton.text = "Подготовка к перепечатке КМ"
         }
         //dynamicButton.text = text
@@ -103,8 +103,8 @@ class MainActivity : AppCompatActivity() {
     private fun callArm(text: String) {
         Log.d(TAG, text)
         when (text) {
-            "laboratory" -> {
-                val intent = Intent(this, LaboratoryMain::class.java)
+            "dropout" -> {
+                val intent = Intent(this, DropoutMain::class.java)
                 startActivity(intent)
             }
 

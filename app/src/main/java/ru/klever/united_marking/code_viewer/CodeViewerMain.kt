@@ -16,7 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.code_viewer_main.*
-import kotlinx.android.synthetic.main.laboratory_main.*
+
 import okhttp3.*
 import ru.klever.united_marking.R
 import ru.klever.united_marking.Settings

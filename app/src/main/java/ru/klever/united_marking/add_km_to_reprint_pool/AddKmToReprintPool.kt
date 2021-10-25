@@ -19,6 +19,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.*
 import org.json.JSONObject
+import ru.klever.united_marking.ErrorMessage
 import ru.klever.united_marking.R
 import ru.klever.united_marking.Settings
 import ru.klever.united_marking.TAG
@@ -53,21 +54,27 @@ class AddKmToReprintPool: AppCompatActivity() {
 
         productByGtinCount.observe(this,{
             Log.d(TAG,it)
-            try {
-                //product_by_gtin_counter.text = it
-                val responseJson = JSONObject(it)
-                if (responseJson["status"].toString()=="ok") {
-                    Log.d(TAG, responseJson["count"].toString())
-                    product_by_gtin_counter.text=responseJson["count"].toString()
-                } else {
-                    val intent = Intent(this, AddKmToReprintPoolErrorMessage::class.java)
-                    intent.putExtra("message",responseJson["message"].toString())
+            if (it !=""){
+                try {
+                    //product_by_gtin_counter.text = it
+                    val responseJson = JSONObject(it)
+                    if (responseJson["status"].toString()=="ok") {
+                        Log.d(TAG, responseJson["count"].toString())
+                        product_by_gtin_counter.text=responseJson["count"].toString()
+                    } else {
+                        val intent = Intent(this, ErrorMessage::class.java)
+                        intent.putExtra("message",responseJson["message"].toString())
+                        startActivity(intent)
+                    }
+
+                } catch (e:Exception) {
+                    Log.d(TAG,e.toString())
+                    val intent = Intent(this, ErrorMessage::class.java)
+                    intent.putExtra("message",it.toString())
                     startActivity(intent)
                 }
-
-            } catch (e:Exception) {
-                Log.d(TAG,e.toString())
             }
+
         })
     }
 
@@ -83,7 +90,7 @@ class AddKmToReprintPool: AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(context, "Ошибка сети \n ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    productByGtinCount.postValue(e.localizedMessage.toString())
                 }
             }
 
@@ -91,7 +98,7 @@ class AddKmToReprintPool: AppCompatActivity() {
                 response.use {
                     if (!response.isSuccessful) {
                         Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(context, "Ошибка сети \n $response", Toast.LENGTH_SHORT).show()
+                            productByGtinCount.postValue(response.toString())
                         }
                     } else {
                         val responseBody=response.body?.string()

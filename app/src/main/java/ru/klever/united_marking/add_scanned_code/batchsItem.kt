@@ -6,5 +6,6 @@ data class batchsItem(
     val batch_status: Int,
     val order_id: Int,
     val product_id: Int,
-    val product_name: String
+    val product_name: String,
+    val gtin: String
 )

@@ -30,6 +30,7 @@ class AddCodeSpinerAdapter(context:Context, batchs: Batchs):ArrayAdapter<batchsI
             view.add_code_spiner_batch_id.text=it.batch_id.toString()
             view.add_code_spiner_batch_print_name.text=it.batch_print_name
             view.add_code_spiner_product_name.text=it.product_name
+            view.add_code_spiner_product_gtin.text=it.gtin.substring(1,it.gtin.length) //отрезаем ведущий 0
             when (it.batch_status) {
                 0 -> view.add_code_spiner_color_status.setImageResource(android.R.drawable.presence_invisible)
                 1 -> view.add_code_spiner_color_status.setImageResource(android.R.drawable.presence_away)

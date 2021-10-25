@@ -9,18 +9,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.JsonArray
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
-import java.security.Timestamp
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import android.net.wifi.WifiManager
+import java.net.InetAddress
 
 
 const val TAG="debuu"
@@ -105,8 +104,16 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
         val jsonObject= JSONObject(sharedpref.getString("settingsJSON", "")).getString("roles")
         return JSONArray(jsonObject)
     }
-    fun getIP():String{
-        return ip
+
+    fun getUpdatePath():String{
+        val updatePath= JSONObject(sharedpref.getString("settingsJSON", "")).getString("update_path")
+        return updatePath
+    }
+    fun getIP(): String {
+        val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val intIPAddress= wifiManager.connectionInfo.ipAddress
+        val ip = InetAddress.getByAddress(intToByteArray(intIPAddress))
+        return ip.hostAddress
     }
     fun getCustomKey(key:String):String{
         return JSONObject(sharedpref.getString("settingsJSON", "")).getString(key)
@@ -139,6 +146,15 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
     }
     fun getAPIUrl():String {
         return JSONObject(sharedpref.getString("settingsJSON", "")).getString("rest_apiURL")
+    }
+
+    private fun intToByteArray(data: Int):ByteArray {
+        val buffer:ByteArray= ByteArray(4)
+        buffer[0] = (data shr 0).toByte()
+        buffer[1] = (data shr 8).toByte()
+        buffer[2] = (data shr 16).toByte()
+        buffer[3] = (data shr 24).toByte()
+        return buffer
     }
 
     private fun run(spec:String, loadStatus:MutableLiveData<Boolean>) {

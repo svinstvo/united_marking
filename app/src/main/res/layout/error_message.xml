@@ -9,16 +9,16 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_km_to_reprint_pool_close_error_button"
+        app:layout_constraintBottom_toTopOf="@+id/error_message_close_error_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_km_to_reprint_pool_error_message"
+        app:layout_constraintTop_toBottomOf="@+id/error_message_text"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_delete" />
 
     <TextView
-        android:id="@+id/add_km_to_reprint_pool_error_message"
+        android:id="@+id/error_message_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/add_km_to_reprint_pool_close_error_button"
+        android:id="@+id/error_message_close_error_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

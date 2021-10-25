@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.klever.united_marking">
+    package="ru.klever.united_marking"
+    android:versionCode="101"
+    android:versionName="2.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -17,7 +21,7 @@
         <receiver
             android:name=".ScanReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true"/>
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -29,16 +33,16 @@
         <activity
             android:name=".dropout.DropoutReasonsRecycleView"
             android:label="Выберети причину вывода"
-            android:parentActivityName=".dropout.DropoutMain"></activity>
+            android:parentActivityName=".dropout.DropoutMain" />
         <activity
             android:name=".dropout.DropoutMain"
             android:label="Лаборатория"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".code_viewer.CodeViewerMain" />
         <activity android:name=".add_scanned_code.AddCodeMain" />
         <activity android:name=".add_km_to_reprint_pool.AddKmToReprintPool" />
-        <activity android:name=".add_km_to_reprint_pool.AddKmToReprintPoolErrorMessage"/>
+        <activity android:name=".ErrorMessage"/>
 
     </application>
 

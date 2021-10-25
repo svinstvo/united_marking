@@ -11,24 +11,32 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Space
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import khttp.get
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.klever.united_marking.add_scanned_code.AddCodeMain
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ru.klever.united_marking.add_km_to_reprint_pool.AddKmToReprintPool
+import ru.klever.united_marking.add_scanned_code.AddCodeMain
 import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.dropout.DropoutMain
+import java.io.File
+import java.lang.Exception
+
 
 class MainActivity : AppCompatActivity() {
     val TAG = "debuu"
+    lateinit var settings: Settings
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val settings: Settings = Settings(this)
+        settings = Settings(this)
         progressBar.visibility = View.INVISIBLE
         val loadstatus: MutableLiveData<Boolean> = MutableLiveData()
 
-
+        checkUpdate()
         loadstatus.observe(this, Observer { it ->
             if (it) {
                 progressBar.visibility = View.VISIBLE
@@ -61,6 +69,33 @@ class MainActivity : AppCompatActivity() {
         settings.loadSetingsMain(loadstatus)
     }
 
+    private fun checkUpdate() {
+        val updateVersion=MutableLiveData<String>()
+        updateVersion.observe(this,{
+            Log.d(TAG,it)
+        })
+        GlobalScope.launch {
+            try{
+                val url=settings.settingsUrl+"/currentversion"
+                Log.d(TAG,url)
+                val r= khttp.get(url)
+                val versionCode = BuildConfig.VERSION_CODE
+                if (versionCode.toString() != r.text) {
+                    val update_url=settings.getUpdatePath()
+                    Log.d(TAG,update_url)
+                    val download=khttp.get(update_url)
+                    val updateFile=download.content
+                    val filepath=filesDir.absolutePath + "united_marking_update.apk"
+                    File(filepath).writeBytes(updateFile)
+                } else {
+                    Log.d(TAG,"апдейт не нужен")
+                }
+            } catch (e:Exception) {
+                Log.d(TAG,e.localizedMessage)
+            }
+        }
+    }
+
     private fun startActivity(settings: Settings) {
         val roles = settings.getRoles()
         for (i in 0 until roles.length()) {
@@ -84,6 +119,7 @@ class MainActivity : AppCompatActivity() {
             "code_viewer" -> dynamicButton.text = "Проверка нанесенных КМ"
             "dropout" -> dynamicButton.text = "Выбытие КМ"
             "add_km_to_reprint_pool" -> dynamicButton.text = "Подготовка к перепечатке КМ"
+            "none" -> dynamicButton.text="Терминалу ${settings.id} не назначена роль"
         }
         //dynamicButton.text = text
         dynamicButton.textSize = 24F
@@ -96,8 +132,6 @@ class MainActivity : AppCompatActivity() {
         val space = Space(this)
         space.minimumHeight = 12
         main_activity_linearLayout.addView(space)
-
-
     }
 
     private fun callArm(text: String) {

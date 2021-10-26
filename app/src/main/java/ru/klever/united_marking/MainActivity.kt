@@ -4,13 +4,17 @@ package ru.klever.united_marking
 
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Space
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -24,6 +28,10 @@ import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.dropout.DropoutMain
 import java.io.File
 import java.lang.Exception
+import com.dcastalia.localappupdate.DownloadApk
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,10 +62,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
-
-
-
         load_settings_main.setOnClickListener {
             settings.loadSetingsMain(loadstatus)
         }
@@ -75,27 +79,37 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG,it)
         })
         GlobalScope.launch {
-            try{
+            //try{
                 val url=settings.settingsUrl+"/currentversion"
                 Log.d(TAG,url)
                 val r= khttp.get(url)
                 val versionCode = BuildConfig.VERSION_CODE
                 if (versionCode.toString() != r.text) {
-                    val update_url=settings.getUpdatePath()
-                    Log.d(TAG,update_url)
-                    val download=khttp.get(update_url)
-                    val updateFile=download.content
-                    val filepath=filesDir.absolutePath + "united_marking_update.apk"
-                    File(filepath).writeBytes(updateFile)
+                    //downloadApk.startDownloadingApk(url, "Update 2.0")
+
+                    Handler(Looper.getMainLooper()).post {
+
+                        val update_url=settings.getUpdatePath()
+                        Log.d(TAG,update_url)
+                        val downloadApk = DownloadApk(this@MainActivity)
+                        downloadApk.startDownloadingApk(update_url,"unitedmarking")
+
+                    }
                 } else {
                     Log.d(TAG,"апдейт не нужен")
                 }
-            } catch (e:Exception) {
-                Log.d(TAG,e.localizedMessage)
-            }
+            //} catch (e:Exception) {
+                //Log.d(TAG,e.localizedMessage.toString())
+            //}
         }
     }
 
+    private fun installAPK(apkFile: String) {
+        val install = Intent(Intent.ACTION_VIEW)
+        install.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        install.setDataAndType(Uri.parse(apkFile),"application/vnd.android.package")
+        startActivity(install)
+    }
     private fun startActivity(settings: Settings) {
         val roles = settings.getRoles()
         for (i in 0 until roles.length()) {

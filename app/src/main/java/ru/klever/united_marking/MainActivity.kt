@@ -79,44 +79,33 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG,it)
         })
         GlobalScope.launch {
-            //try{
+            try{
                 val url=settings.settingsUrl+"/currentversion"
                 Log.d(TAG,url)
                 val r= khttp.get(url)
                 val versionCode = BuildConfig.VERSION_CODE
                 if (versionCode.toString() != r.text) {
-                    //downloadApk.startDownloadingApk(url, "Update 2.0")
 
                     Handler(Looper.getMainLooper()).post {
-
                         val update_url=settings.getUpdatePath()
                         Log.d(TAG,update_url)
                         val downloadApk = DownloadApk(this@MainActivity)
                         downloadApk.startDownloadingApk(update_url,"unitedmarking")
-
                     }
                 } else {
                     Log.d(TAG,"апдейт не нужен")
                 }
-            //} catch (e:Exception) {
-                //Log.d(TAG,e.localizedMessage.toString())
-            //}
+            } catch (e:Exception) {
+                Log.d(TAG,e.localizedMessage.toString())
+            }
         }
     }
 
-    private fun installAPK(apkFile: String) {
-        val install = Intent(Intent.ACTION_VIEW)
-        install.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        install.setDataAndType(Uri.parse(apkFile),"application/vnd.android.package")
-        startActivity(install)
-    }
     private fun startActivity(settings: Settings) {
         val roles = settings.getRoles()
         for (i in 0 until roles.length()) {
             createButtonDynamically(roles.getString(i))
         }
-
-
     }
 
     private fun createButtonDynamically(text: String) {

@@ -88,13 +88,16 @@ class CodeViewerMain: AppCompatActivity(){
                         val bodyResponce=response.body!!.string()
                         val gson=Gson()
                         val productPage= gson.fromJson(bodyResponce,ProductPage::class.java)
-                        Log.d(TAG,productPage.image)
                         Log.d(TAG,productPage.name)
                         Handler(Looper.getMainLooper()).post {
                             product_name.text=productPage.name
-                            val decodedString=Base64.decode(productPage.image,Base64.DEFAULT)
-                            val bitmap=BitmapFactory.decodeByteArray(decodedString,0,decodedString.size)
-                            product_image.setImageBitmap(bitmap)
+                            if (productPage.image != null) {
+                                val decodedString=Base64.decode(productPage.image,Base64.DEFAULT)
+                                val bitmap=BitmapFactory.decodeByteArray(decodedString,0,decodedString.size)
+                                product_image.setImageBitmap(bitmap)
+                            }
+
+
                         }
                     }
                 }

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/android/united_marking/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.17222222222222222" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/activity_main.xml" value="0.33229166666666665" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/add_code_main.xml" value="0.15625" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/add_km_to_reprint_pool.xml" value="0.5" />
@@ -13,6 +14,8 @@
         <entry key="..\:/android/united_marking/app/src/main/res/layout/dropout_main_recycleview_item.xml" value="0.24739583333333334" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/error_message.xml" value="0.28020833333333334" />
         <entry key="..\:/android/united_marking/app/src/main/res/layout/laboratory_main.xml" value="0.24739583333333334" />
+        <entry key="..\:/android/united_marking/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.362962962962963" />
+        <entry key="..\:/android/united_marking/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.362962962962963" />
       </map>
     </option>
   </component>

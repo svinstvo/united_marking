@@ -1,5 +1,6 @@
 package ru.klever.united_marking.code_viewer
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +24,12 @@ import ru.klever.united_marking.R
 import ru.klever.united_marking.Settings
 import ru.klever.united_marking.TAG
 import java.io.IOException
+import com.journeyapps.barcodescanner.ScanOptions
+
+import com.journeyapps.barcodescanner.ScanContract
+
+import androidx.activity.result.ActivityResultLauncher
+import com.journeyapps.barcodescanner.ScanIntentResult
 
 
 class CodeViewerMain: AppCompatActivity(){
@@ -59,6 +67,16 @@ class CodeViewerMain: AppCompatActivity(){
 //            }
 //            return@setOnKeyListener false
 //        }
+        code_viewer_run_camera.setOnClickListener {
+            val options = ScanOptions()
+            options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX)
+            options.setPrompt("Scan a barcode")
+            //options.setCameraId(0) // Use a specific camera of the device
+
+            options.setBeepEnabled(true)
+            options.setBarcodeImageEnabled(false)
+            barcodeLauncher.launch(ScanOptions())
+        }
     }
 
     private fun sendCodes(context: Context, data: String, sendStatus: MutableLiveData<Boolean>) {
@@ -102,7 +120,35 @@ class CodeViewerMain: AppCompatActivity(){
                     }
                 }
                 sendStatus.postValue(false)
+
             }
         })
     }
+    private val barcodeLauncher = registerForActivityResult(
+        ScanContract()
+    ) { result: ScanIntentResult ->
+        if (result.contents == null) {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(
+                this,
+                "Scanned: " + result.contents,
+                Toast.LENGTH_LONG
+            ).show()
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipdata=ClipData.newPlainText(result.contents,result.contents)
+
+            clipboard.setPrimaryClip(clipdata)
+
+            if (result.contents.take(1)=="\u001D") {
+                sendCodes(this,result.contents.substring(1),sendInProgress)
+            } else {
+                sendCodes(this,result.contents,sendInProgress)
+            }
+
+        }
+    }
+
+    // Launch
+
 }

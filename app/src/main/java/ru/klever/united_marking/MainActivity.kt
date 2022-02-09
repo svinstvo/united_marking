@@ -18,6 +18,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.dcastalia.localappupdate.DownloadApk
 import khttp.get
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
@@ -28,7 +29,6 @@ import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.dropout.DropoutMain
 import java.io.File
 import java.lang.Exception
-import com.dcastalia.localappupdate.DownloadApk
 
 
 
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         when (text) {
-            "add_code" -> dynamicButton.text = "Ручное добавление кодов в партию"
+            "add_code" -> dynamicButton.text = "Ручное добавление кодов"
             "code_viewer" -> dynamicButton.text = "Проверка нанесенных КМ"
             "dropout" -> dynamicButton.text = "Выбытие КМ"
             "add_km_to_reprint_pool" -> dynamicButton.text = "Подготовка к перепечатке КМ"

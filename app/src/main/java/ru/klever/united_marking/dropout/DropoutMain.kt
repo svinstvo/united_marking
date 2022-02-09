@@ -72,7 +72,7 @@ class DropoutMain:AppCompatActivity(), OnDropoutItemClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode==REQUEST_CODE_SELECT_REASON) {
             val resId = data!!.getStringExtra("reason_id")
-            val resText= data.getStringExtra("reason_text")
+            val resText= data!!.getStringExtra("reason_text")
             Log.d(ru.klever.united_marking.TAG, "$requestCode -- $resultCode -- $resId -- $resText ")
             super.onActivityResult(requestCode, resultCode, data)
             settings.dropoutSetReason(Reasons(resId,resText))

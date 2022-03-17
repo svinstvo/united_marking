@@ -127,6 +127,8 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
         editor.apply()
     }
 
+
+
     fun dropoutGetLastReason():Reasons{
         val reasonText:String = sharedpref.getString("dropout_last_reason_text","Выберите причину")!!
         val reasonId:String = sharedpref.getString("dropout_last_reason_id","")!!
@@ -135,6 +137,30 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
 
     fun dropoutGetAllReasonsAndId(): MutableList<Reasons> {
         val json=JSONObject(sharedpref.getString("settingsJSON", "")).getString("available_dropout_reasons")
+        val availableReasons=JSONObject(json)
+        val list= mutableListOf<Reasons>()
+
+        for (i in availableReasons.keys()){
+            val curentReason=Reasons(i,availableReasons[i].toString())
+            list.add(curentReason).toString()
+        }
+        return list
+    }
+
+    fun removeSetReason(reason:Reasons){
+        val editor=sharedpref.edit()
+        editor.putString("remove_last_reason_text",reason.reason_text)
+        editor.putString("remove_last_reason_id",reason.reason_id)
+        editor.apply()
+    }
+    fun removeGetLastReason():Reasons{
+        val reasonText:String = sharedpref.getString("remove_last_reason_text","Выберите причину")!!
+        val reasonId:String = sharedpref.getString("remove_last_reason_id","")!!
+        return Reasons(reasonId,reasonText)
+    }
+
+    fun removeGetAllReasonsAndId(): MutableList<Reasons> {
+        val json=JSONObject(sharedpref.getString("settingsJSON", "")).getString("available_remove_reasons")
         val availableReasons=JSONObject(json)
         val list= mutableListOf<Reasons>()
 

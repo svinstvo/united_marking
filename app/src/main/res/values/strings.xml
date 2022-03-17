@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Единая маркировка</string>
+    <string name="retry_load_settings">Повторить попытку получения настроек</string>
 </resources>

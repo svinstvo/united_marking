@@ -14,23 +14,15 @@
         app:layout_constraintBottom_toTopOf="@+id/load_settings_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/load_settings_main"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="Повторить попытку получения настроек"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/load_settings_locale"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/load_settings_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,11 +32,10 @@
     <TextView
         android:id="@+id/last_message"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/load_settings_main"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/main_activity_linearLayout"
@@ -55,6 +46,16 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Продолжить без сервера"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/load_settings_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry_load_settings"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

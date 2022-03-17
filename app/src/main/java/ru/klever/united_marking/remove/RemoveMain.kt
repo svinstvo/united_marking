@@ -1,4 +1,4 @@
-package ru.klever.united_marking.dropout
+package ru.klever.united_marking.remove
 
 import android.app.Activity
 import android.content.ClipboardManager
@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.*
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -27,7 +26,7 @@ import java.lang.Exception
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
 
-class DropoutMain:AppCompatActivity(), OnDropoutItemClickListener {
+class RemoveMain:AppCompatActivity(), OnRemoveItemClickListener {
     private val REQUEST_CODE_SELECT_REASON=1
 
     private val myCodes= mutableListOf<String>()
@@ -35,28 +34,25 @@ class DropoutMain:AppCompatActivity(), OnDropoutItemClickListener {
     var sendResult=MutableLiveData<JSONObject>()
 
     private lateinit var settings: Settings
-    private lateinit var adapter: DropoutMainRecycleAdapter
+    private lateinit var adapter: RemoveMainRecycleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.dropout_main)
+        setContentView(R.layout.remove_main)
         settings = Settings(this)
 
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        selected_reason.text = settings.dropoutGetLastReason().reason_text
+        selected_reason.text = settings.removeGetLastReason().reason_text
         group_reason_recycle.referencedIds.forEach { id ->
             findViewById<View>(id).setOnClickListener {
-                val intent = Intent(this, DropoutReasonsRecycleView::class.java)
+                val intent = Intent(this, RemoveReasonsRecycleView::class.java)
                 startActivityForResult(intent, REQUEST_CODE_SELECT_REASON)
             }
         }
 
         val recyclerView: RecyclerView = findViewById(R.id.dropout_main_recycleview)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = DropoutMainRecycleAdapter(myCodes, this)
+        adapter = RemoveMainRecycleAdapter(myCodes, this)
         recyclerView.adapter = adapter
 
         sendResult.observe(this){
@@ -77,19 +73,17 @@ class DropoutMain:AppCompatActivity(), OnDropoutItemClickListener {
 
                 if (km.length!=31){
                     success=false
-                    fail_text="Неверная длина кода $km"
-                } else {
-                    if (km[24].hashCode()!=29 ){
-                        success=false
-                        fail_text="Нету символа GS $km"
-                    }
+                    fail_text="Неверная длинна"
                 }
-
+                if (km.get(24).hashCode()!=29){
+                    success=false
+                    fail_text="Нету символа GS"
+                }
 
                 if (success){
                     GlobalScope.launch {
-                        val params= mapOf("term_id" to settings.id,"km" to km,"reason" to settings.dropoutGetLastReason().reason_id)
-                        val responce= get(url=settings.getAPIUrl()+"dropout_code", params = params)
+                        val params= mapOf("term_id" to settings.id,"km" to km,"reason" to settings.removeGetLastReason().reason_id)
+                        val responce= get(url=settings.getAPIUrl()+"remove_code", params = params)
                         try {
                             sendResult.postValue(responce.jsonObject)
                         } catch (e: Exception) {
@@ -114,7 +108,8 @@ class DropoutMain:AppCompatActivity(), OnDropoutItemClickListener {
             val resText= data!!.getStringExtra("reason_text")
             Log.d(ru.klever.united_marking.TAG, "$requestCode -- $resultCode -- $resId -- $resText ")
             super.onActivityResult(requestCode, resultCode, data)
-            settings.dropoutSetReason(Reasons(resId,resText))
+            settings.removeSetReason(Reasons(resId,resText))
+            Log.d(TAG,settings.removeGetLastReason().toString())
             selected_reason.text=resText
         }
     }

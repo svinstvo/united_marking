@@ -4,22 +4,19 @@ package ru.klever.united_marking
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Space
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dcastalia.localappupdate.DownloadApk
-import khttp.get
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,11 +24,9 @@ import ru.klever.united_marking.add_km_to_reprint_pool.AddKmToReprintPool
 import ru.klever.united_marking.add_scanned_code.AddCodeMain
 import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.dropout.DropoutMain
-import java.io.File
+import ru.klever.united_marking.remove.RemoveMain
 import java.lang.Exception
-
-
-
+import android.os.CountDownTimer as CountDownTimer
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var settings: Settings
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main)
         settings = Settings(this)
         progressBar.visibility = View.INVISIBLE
@@ -55,9 +53,13 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, settings.loadedfromserver.toString())
                 if (settings.loadedfromserver) {
                     startActivity(settings)
+                    last_message.text=""
+                    load_settings_main.visibility=View.INVISIBLE
                 } else {
                     Log.d(TAG, "not loaded")
                     last_message.text = "Не получилось получить настройки с сервера"
+                    load_settings_main.visibility=View.VISIBLE
+                    startCounter(loadstatus)
                 }
             }
         })
@@ -71,6 +73,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         settings.loadSetingsMain(loadstatus)
+    }
+
+    private fun startCounter(loadstatus:MutableLiveData<Boolean>) {
+        val timer= object : CountDownTimer(5000,1000) {
+            override fun onTick(milliseconds: Long) {
+                load_settings_main.text="не удалось получить настройки повтор через ${(milliseconds/1000)}"
+            }
+
+            override fun onFinish() {
+                settings.loadSetingsMain(loadstatus)
+            }
+
+        }.start()
     }
 
     private fun checkUpdate() {
@@ -119,9 +134,10 @@ class MainActivity : AppCompatActivity() {
 
         when (text) {
             "add_code" -> dynamicButton.text = "Ручное добавление кодов"
-            "code_viewer" -> dynamicButton.text = "Проверка нанесенных КМ"
-            "dropout" -> dynamicButton.text = "Выбытие КМ"
-            "add_km_to_reprint_pool" -> dynamicButton.text = "Подготовка к перепечатке КМ"
+            "code_viewer" -> dynamicButton.text = "Проверка КМ"
+            "dropout" -> dynamicButton.text = "Выбытие введеных КМ"
+            "remove" -> dynamicButton.text = "Выбытие НЕ введеных КМ"
+            "add_km_to_reprint_pool" -> dynamicButton.text = "Перепечатка КМ"
             "none" -> dynamicButton.text="Терминалу ${settings.id} не назначена роль"
         }
         //dynamicButton.text = text
@@ -155,6 +171,10 @@ class MainActivity : AppCompatActivity() {
             }
             "add_km_to_reprint_pool" -> {
                 val intent=Intent(this,AddKmToReprintPool::class.java)
+                startActivity(intent)
+            }
+            "remove" -> {
+                val intent=Intent(this,RemoveMain::class.java)
                 startActivity(intent)
             }
         }

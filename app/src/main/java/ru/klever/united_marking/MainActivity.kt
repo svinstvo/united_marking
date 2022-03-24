@@ -2,21 +2,26 @@ package ru.klever.united_marking
 
 
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.net.Uri
+import android.os.*
+import android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Space
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dcastalia.localappupdate.DownloadApk
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,8 +30,7 @@ import ru.klever.united_marking.add_scanned_code.AddCodeMain
 import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.dropout.DropoutMain
 import ru.klever.united_marking.remove.RemoveMain
-import java.lang.Exception
-import android.os.CountDownTimer as CountDownTimer
+import android.provider.Settings as Setting_android
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +46,18 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
         val loadstatus: MutableLiveData<Boolean> = MutableLiveData()
 
+        // Если нету разрешения на запись в файловую систему, то запрпашиваем его, необходимо для работы обновления.
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),1);
+        }
+
+
         checkUpdate()
+
+        //Крутим спинер пока получаем настройки ну и если нет, то пишем сообщение об ошибке
         loadstatus.observe(this, Observer { it ->
             if (it) {
                 progressBar.visibility = View.VISIBLE
@@ -68,13 +83,10 @@ class MainActivity : AppCompatActivity() {
             settings.loadSetingsMain(loadstatus)
         }
 
-        load_settings_locale.setOnClickListener {
-            startActivity(settings)
-        }
 
         settings.loadSetingsMain(loadstatus)
     }
-
+    //Если не получилось получить настройки, то запускаем таймер для повторной попытки
     private fun startCounter(loadstatus:MutableLiveData<Boolean>) {
         val timer= object : CountDownTimer(5000,1000) {
             override fun onTick(milliseconds: Long) {
@@ -84,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             override fun onFinish() {
                 settings.loadSetingsMain(loadstatus)
             }
-
         }.start()
     }
 
@@ -116,6 +127,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Получаем доступные роли, и делаем кнопочки с ними
     private fun startActivity(settings: Settings) {
         val roles = settings.getRoles()
         for (i in 0 until roles.length()) {
@@ -152,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         space.minimumHeight = 12
         main_activity_linearLayout.addView(space)
     }
-
+    //Обработка нажатой кнопки с выбранным АРМом
     private fun callArm(text: String) {
         Log.d(TAG, text)
         when (text) {
@@ -179,4 +191,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main)
         settings = Settings(this)
+        title = "Цех № ${settings.getDepartment()}"
         progressBar.visibility = View.INVISIBLE
         val loadstatus: MutableLiveData<Boolean> = MutableLiveData()
 

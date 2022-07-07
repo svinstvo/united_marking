@@ -174,6 +174,11 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
         return JSONObject(sharedpref.getString("settingsJSON", "")).getString("rest_apiURL")
     }
 
+    fun getDepartment():String{
+        //return sharedpref.getString("department","")!!
+        return JSONObject(sharedpref.getString("settingsJSON", "")).getString("department")
+    }
+
     private fun intToByteArray(data: Int):ByteArray {
         val buffer:ByteArray= ByteArray(4)
         buffer[0] = (data shr 0).toByte()

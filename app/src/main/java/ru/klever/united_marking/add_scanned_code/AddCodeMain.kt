@@ -75,7 +75,7 @@ class AddCodeMain: AppCompatActivity() {
 
                 if (success){
                     GlobalScope.launch {
-                        val params= mapOf("term_id" to settings.id,"batch_date" to SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()),"km" to km)
+                        val params= mapOf("term_id" to settings.id,"department" to settings.getDepartment(),"batch_date" to SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()),"km" to km)
                         val responce= get(url=settings.getAPIUrl()+"add_km", params = params)
                         try {
                             sendResult.postValue(responce.jsonObject)

@@ -88,7 +88,7 @@ class DropoutMain:AppCompatActivity(), OnDropoutItemClickListener {
 
                 if (success){
                     GlobalScope.launch {
-                        val params= mapOf("term_id" to settings.id,"km" to km,"reason" to settings.dropoutGetLastReason().reason_id)
+                        val params= mapOf("term_id" to settings.id,"department" to settings.getDepartment(), "km" to km,"reason" to settings.dropoutGetLastReason().reason_id)
                         val responce= get(url=settings.getAPIUrl()+"dropout_code", params = params)
                         try {
                             sendResult.postValue(responce.jsonObject)

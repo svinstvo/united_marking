@@ -43,11 +43,16 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main)
         settings = Settings(this)
-        title = "Цех № ${settings.getDepartment()}"
+        try {
+            title = "Цех № ${settings.getDepartment()}"
+        }
+        catch (e:java.lang.Exception){
+            Log.d(TAG,e.localizedMessage)
+        }
         progressBar.visibility = View.INVISIBLE
         val loadstatus: MutableLiveData<Boolean> = MutableLiveData()
 
-        // Если нету разрешения на запись в файловую систему, то запрпашиваем его, необходимо для работы обновления.
+        // Если нету разрешения на запись в файловую систему, то запрашиваем его, необходимо для работы обновления.
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
         ) {

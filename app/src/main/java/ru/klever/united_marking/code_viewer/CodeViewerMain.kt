@@ -57,6 +57,7 @@ class CodeViewerMain: AppCompatActivity(){
                         val cisInfo: JSONObject =jsonArray.getJSONObject(0).getJSONObject("cisInfo")
                         info_product_name.text=getValue(cisInfo,"productName")
                         info_emission_date.text=getValue(cisInfo,"emissionDate")
+                        info_emission_type.text=getValue(cisInfo,"emissionType")
                         info_produced_date.text=getValue(cisInfo,"producedDate")
                         info_expiration_date.text=getValue(cisInfo,"expirationDate")
                         info_status.text=getValue(cisInfo,"status")
@@ -87,6 +88,7 @@ class CodeViewerMain: AppCompatActivity(){
                 if (success){
                     info_product_name.text=""
                     info_emission_date.text=""
+                    info_emission_type.text=""
                     info_produced_date.text=""
                     info_expiration_date.text=""
                     info_status.text=""

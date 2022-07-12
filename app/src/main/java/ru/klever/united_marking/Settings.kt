@@ -60,7 +60,6 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
             edit.putString("id",id)
             edit.apply()
         }
-
         // try read settings url from stored json
         try {
             settingsUrl=JSONObject(sharedpref.getString("settingsJSON", "")).getString("settingsUrl")

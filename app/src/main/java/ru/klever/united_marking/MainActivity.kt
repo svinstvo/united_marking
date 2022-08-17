@@ -43,12 +43,8 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main)
         settings = Settings(this)
-        try {
-            title = "Цех № ${settings.getDepartment()}"
-        }
-        catch (e:java.lang.Exception){
-            Log.d(TAG,e.localizedMessage)
-        }
+
+        main_activity_termid.text="${settings.id}/${BuildConfig.VERSION_CODE}"
         progressBar.visibility = View.INVISIBLE
         val loadstatus: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -74,6 +70,12 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, settings.loadedfromserver.toString())
                 if (settings.loadedfromserver) {
                     startActivity(settings)
+                    try {
+                        title = "Цех № ${settings.getDepartment()}"
+                    }
+                    catch (e:java.lang.Exception){
+                        Log.d(TAG,e.localizedMessage)
+                    }
                     last_message.text=""
                     load_settings_main.visibility=View.INVISIBLE
                 } else {
@@ -154,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             "add_code" -> dynamicButton.text = "Ручное добавление кодов"
             "code_viewer" -> dynamicButton.text = "Проверка КМ"
             "dropout" -> dynamicButton.text = "Выбытие введеных КМ"
-            "remove" -> dynamicButton.text = "Выбытие НЕ введеных КМ"
+            "remove" -> dynamicButton.text = "Выбытие КМ"
             "add_km_to_reprint_pool" -> dynamicButton.text = "Перепечатка КМ"
             "none" -> dynamicButton.text="Терминалу ${settings.id} не назначена роль"
         }

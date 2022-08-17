@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -65,13 +66,16 @@ class AddKmToReprintPool: AppCompatActivity() {
 
 
                 if (success){
+                    add_km_to_reprint_pool_spiner.visibility= View.VISIBLE
                     GlobalScope.launch {
                         val params= mapOf("term_id" to settings.id,"km" to km)
-                        val responce= get(url=settings.getAPIUrl()+"add_km_to_reprint_pool", params = params)
                         try {
+                            val responce= get(url=settings.getAPIUrl()+"add_km_to_reprint_pool", params = params)
                             productByGtinCount.postValue(responce.text)
+
                         } catch (e: Exception) {
                             Log.d(TAG,e.toString())
+                            productByGtinCount.postValue(e.toString())
                         }
                     }
                 }else{
@@ -83,6 +87,7 @@ class AddKmToReprintPool: AppCompatActivity() {
         }
 
         productByGtinCount.observe(this) {
+            add_km_to_reprint_pool_spiner.visibility=View.INVISIBLE
             Log.d(TAG, it)
             product_by_gtin_counter.text=it
         }

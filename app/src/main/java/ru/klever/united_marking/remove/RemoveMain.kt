@@ -13,9 +13,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import khttp.get
 import kotlinx.android.synthetic.main.dropout_main.*
+import kotlinx.android.synthetic.main.dropout_main.group_reason_recycle
+import kotlinx.android.synthetic.main.dropout_main.selected_reason
+import kotlinx.android.synthetic.main.remove_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.*
@@ -56,11 +60,15 @@ class RemoveMain:AppCompatActivity(), OnRemoveItemClickListener {
         recyclerView.adapter = adapter
 
         sendResult.observe(this){
+
             if (it["status"]!="ok") {
                 val intent = Intent(this, ErrorMessage::class.java)
                 intent.putExtra("message",it["text"].toString())
                 startActivity(intent)
+            } else {
+                remove_counter.text=it["count"].toString()
             }
+            remove_spiner.visibility=View.INVISIBLE
         }
 
 
@@ -81,13 +89,17 @@ class RemoveMain:AppCompatActivity(), OnRemoveItemClickListener {
                 }
 
                 if (success){
+                    remove_spiner.visibility=View.VISIBLE
                     GlobalScope.launch {
                         val params= mapOf("term_id" to settings.id, "department" to settings.getDepartment(),"km" to km,"reason" to settings.removeGetLastReason().reason_id)
-                        val responce= get(url=settings.getAPIUrl()+"remove_code", params = params)
                         try {
+                            val responce= get(url=settings.getAPIUrl()+"remove_code", params = params)
                             sendResult.postValue(responce.jsonObject)
                         } catch (e: Exception) {
                             Log.d(TAG,e.toString())
+                            val data = JSONObject("""{"status":"error"}""")
+                            data.put("text",e.toString())
+                            sendResult.postValue(data)
                         }
                     }
                 }else{

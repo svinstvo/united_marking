@@ -71,7 +71,7 @@ class CodeViewerMain: AppCompatActivity(){
         clipboard.addPrimaryClipChangedListener {
             if (lifecycle.currentState == Lifecycle.State.RESUMED) {
                 val km: String = clipboard.primaryClip?.getItemAt(0)?.text.toString().trim()
-
+                Log.d(TAG,km)
                 var success = true
                 var fail_text=""
 
@@ -98,6 +98,7 @@ class CodeViewerMain: AppCompatActivity(){
                         try {
                         val responce= get(url=settings.getAPIUrl()+"show_info_about_km", params = params)
                             server_response.postValue(responce.text)
+                            Log.d(TAG,settings.getAPIUrl()+"show_info_about_km")
                         } catch (e: Exception) {
                             Log.d(TAG,e.toString())
                             server_response.postValue("")

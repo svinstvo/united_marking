@@ -94,7 +94,7 @@ class Settings (_context: Context, _ip:String="", _id:String="", _settingsUrl:St
 
     fun loadSetingsMain(loadstatus:MutableLiveData<Boolean>){
         loadstatus.postValue(true)
-        val spec= "$settingsUrl?id=$id"
+        val spec= "$settingsUrl?id=$id&version=${BuildConfig.VERSION_CODE}"
         Log.d(TAG,spec)
         run(spec,loadstatus)
     }

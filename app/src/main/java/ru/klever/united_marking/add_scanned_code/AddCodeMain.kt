@@ -5,10 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonObject
 import khttp.get
 import kotlinx.android.synthetic.main.add_scanned_code_main.*
 import kotlinx.coroutines.GlobalScope
@@ -48,10 +51,19 @@ class AddCodeMain: AppCompatActivity() {
         }
 
         sendResult.observe(this) {
+            add_scanned_code_spinner.visibility=View.INVISIBLE
             if (it["status"]!="ok") {
                 val intent = Intent(this, ErrorMessage::class.java)
                 intent.putExtra("message",it["text"].toString())
                 startActivity(intent)
+            } else {
+                try {
+                    add_scanned_code_name.text=it["short_name"].toString()
+                    add_scanned_code_counter.text=it["count"].toString()
+                } catch (e:Exception){
+                    Log.d(TAG,e.toString())
+                    Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -74,13 +86,18 @@ class AddCodeMain: AppCompatActivity() {
 
 
                 if (success){
+                    add_scanned_code_spinner.visibility=View.VISIBLE
                     GlobalScope.launch {
                         val params= mapOf("term_id" to settings.id,"department" to settings.getDepartment(),"batch_date" to SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()),"km" to km)
-                        val responce= get(url=settings.getAPIUrl()+"add_km", params = params)
                         try {
+                            val responce= get(url=settings.getAPIUrl()+"add_km", params = params)
                             sendResult.postValue(responce.jsonObject)
                         } catch (e:Exception) {
                             Log.d(TAG,e.toString())
+                            val resp=JSONObject()
+                            resp.put("status","error")
+                            resp.put("text",e.toString())
+                            sendResult.postValue(resp)
                         }
                     }
                 }else{

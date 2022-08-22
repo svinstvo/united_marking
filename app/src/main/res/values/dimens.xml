@@ -2,4 +2,5 @@
 <resources>
     <dimen name="RecycleViewItemSize">24</dimen>
     <dimen name="LaboratoryMainFontSize">24</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

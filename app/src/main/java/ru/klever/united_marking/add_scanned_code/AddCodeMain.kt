@@ -69,6 +69,9 @@ class AddCodeMain: AppCompatActivity() {
 
         clipboard.addPrimaryClipChangedListener {
             if (lifecycle.currentState == Lifecycle.State.RESUMED) {
+                Log.d(TAG,editTextTextPersonName2.isFocusable.toString())
+                editTextTextPersonName2.requestFocus()
+
                 val km: String = clipboard.primaryClip?.getItemAt(0)?.text.toString().trim()
 
                 var success = true

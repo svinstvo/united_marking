@@ -62,6 +62,7 @@
             android:parentActivityName=".remove.RemoveMain" />
 
         <activity android:name=".code_viewer.CodeViewerMain" />
+        <activity android:name=".code_viewer.CodeViewMainNew"/>
         <activity android:name=".add_scanned_code.AddCodeMain" />
         <activity android:name=".add_km_to_reprint_pool.AddKmToReprintPool" />
         <activity android:name=".ErrorMessage"/>

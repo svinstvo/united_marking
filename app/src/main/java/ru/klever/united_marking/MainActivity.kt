@@ -27,6 +27,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ru.klever.united_marking.add_km_to_reprint_pool.AddKmToReprintPool
 import ru.klever.united_marking.add_scanned_code.AddCodeMain
+import ru.klever.united_marking.code_viewer.CodeViewMainNew
 import ru.klever.united_marking.code_viewer.CodeViewerMain
 import ru.klever.united_marking.dropout.DropoutMain
 import ru.klever.united_marking.remove.RemoveMain
@@ -182,6 +183,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             "code_viewer" -> {
+                //val intent = Intent(this, CodeViewMainNew::class.java)
                 val intent = Intent(this, CodeViewerMain::class.java)
                 startActivity(intent)
             }
@@ -199,5 +201,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

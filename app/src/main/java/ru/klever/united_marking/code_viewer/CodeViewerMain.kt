@@ -49,6 +49,7 @@ class CodeViewerMain: AppCompatActivity(){
                 info_loading_spinner.visibility=View.INVISIBLE
                 try {
                     val jsonArray = JSONTokener(it).nextValue() as JSONArray
+                    Log.d(TAG,jsonArray.toString())
                     if (jsonArray.getJSONObject(0).has("errorCode")) {
                         val intent = Intent(this, ErrorMessage::class.java)
                         intent.putExtra("message","Ответ ЦРПТ: "+jsonArray.getJSONObject(0).getString("errorMessage"))
@@ -61,6 +62,25 @@ class CodeViewerMain: AppCompatActivity(){
                         info_produced_date.text=getValue(cisInfo,"producedDate")
                         info_expiration_date.text=getValue(cisInfo,"expirationDate")
                         info_status.text=getValue(cisInfo,"status")
+
+                        //--------------start new wave
+                        var iter=cisInfo.keys()
+                        while (iter.hasNext()){
+                            val key=iter.next()
+                            Log.d(TAG,"$key  - ${getValue(cisInfo, key)}")
+                        }
+
+                        Log.d(TAG,"start_local_data")
+                        val localdata=jsonArray.getJSONObject(1).getJSONArray("local_data")
+                        Log.d(TAG,localdata.toString())
+                        for (i in 0 until localdata.length()){
+                            val item = localdata.getJSONObject(i)
+                            iter=item.keys()
+                            while (iter.hasNext()){
+                                val key=iter.next()
+                                Log.d(TAG,"$key  - ${getValue(item, key)}")
+                            }
+                        }
                     }
                 } catch (e: Exception) {
                     Log.d(TAG, e.toString())
